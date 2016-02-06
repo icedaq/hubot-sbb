@@ -35,12 +35,17 @@ module.exports = (robot) ->
           arrivalFormated = "#{pad(arrival.getHours())}:#{pad(arrival.getMinutes())}"
           message += "#{count}. #{departureFormated} - #{arrivalFormated}. Journey: "
 
-          for section in i.sections
-            sDeparture = section.departure.station.name
-            sArrival = section.arrival.station.name
-            message += " \'#{sDeparture}\' -> \'#{sArrival}\',"
-          message = message.substring(0, message.length - 1);
-          message += ".\n"
+          changes = (i.sections.length-1)
+          start = i.sections[0].departure.station.name # We start here.
+          end = i.sections[changes].arrival.station.name
+
+          trip = " -> "
+          if changes >= 1
+            for j in [1..changes]
+              sDeparture = i.sections[j].departure.station.name
+              trip += "#{sDeparture} -> "
+
+          message += "#{start}#{trip}#{end}.\n"
           count++
         msg.reply message.trim()
 
