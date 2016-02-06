@@ -33,17 +33,14 @@ module.exports = (robot) ->
           departureFormated = "#{pad(departure.getHours())}:#{pad(departure.getMinutes())}"
           arrival = new Date(i.to.arrival)
           arrivalFormated = "#{pad(arrival.getHours())}:#{pad(arrival.getMinutes())}"
-          message += "#{count}. #{departureFormated} - #{arrivalFormated}."
+          message += "#{count}. #{departureFormated} - #{arrivalFormated}. Journey: "
 
-          if i.transfers >= 1 # We need to switch ride.
-            message += " Journey:"
-            for section in i.sections
-              sDeparture = section.departure.station.name
-              sArrival = section.arrival.station.name
-              message += " \'#{sDeparture}\' -> \'#{sArrival}\',"
-            message = message.substring(0, message.length - 1);
-            message += "."
-          message += "\n"
+          for section in i.sections
+            sDeparture = section.departure.station.name
+            sArrival = section.arrival.station.name
+            message += " \'#{sDeparture}\' -> \'#{sArrival}\',"
+          message = message.substring(0, message.length - 1);
+          message += ".\n"
           count++
         msg.reply message.trim()
 
